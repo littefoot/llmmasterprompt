@@ -1,0 +1,75 @@
+Since you are working in **Google Antigravity** (the agent-first IDE), you have a distinct advantage: you can define **persistent context** that the agents (Gemini 3 Pro/Deep Think) must follow.
+
+In Antigravity, the distinction between Skills, Rules, and Workflows is architectural:
+
+* **Rules (The Guardrails):** "Always do this." (e.g., *Never* run `npm install`).
+* **Skills (The Tools):** "Here is how to do this specific hard thing." (e.g., A script to run database migrations tailored to Bun's SQLite).
+* **Workflows (The Recipes):** "Here is the sequence of steps for a big task." (e.g., Scaffolding a new route).
+
+Below is a **Master Prompt** you can paste into your **Antigravity Manager View** (or the main Agent Chat) to have it configure the workspace for you.
+
+### The Master Prompt
+
+Copy and paste this into the Agent Manager:
+
+> **Goal:** Configure this workspace as a strict **Bun-first** environment. I want you to generate the necessary **Rules**, **Skills**, and **Workflows** configuration files to ensure all agents working here use Bun correctly and avoid Node.js "hallucinations."
+> **1. Define Project Rules (Context):**
+> Create a system instruction or `rules.md` that enforces:
+> * **Runtime:** STRICTLY use `bun` for all commands. Never use `npm`, `yarn`, or `node`.
+> * **Installation:** Always use `bun install`.
+> * **TypeScript:** Write `.ts` files directly. Do NOT configure `ts-node`, `tsc`, or build steps for execution. Bun runs TS natively.
+> * **Imports:** Prefer ESM (`import`) over CommonJS (`require`).
+> * **APIs:** Prioritize Web Standards (`fetch`, `Response`) over Node APIs (`http`). If a file system call is needed, check if `Bun.file()` can do it before falling back to `node:fs`.
+> * **Environment:** Assume `.env` is loaded automatically by Bun. Do not install `dotenv`.
+> 
+> 
+> **2. Create Skills (Tools):**
+> Generate `SKILL` definitions for the following:
+> * `bun-test`: A skill to run tests using `bun test`. It should support filtering by pattern (e.g., `bun test user-auth`).
+> * `bun-db`: A skill to interact with `bun:sqlite` safely (if we are using it) or your preferred ORM with Bun.
+> * `dependency-check`: A skill to verify if a requested package is compatible with Bun before installing (checking `bun-types` or known incompatibility lists).
+> 
+> 
+> **3. Define Workflows (Process):**
+> Create a workflow for **"New Feature Implementation"** that:
+> * Step 1: Scaffolds the file using `bun` native APIs.
+> * Step 2: Writes a test file *first* (TDD) using `bun test` syntax (`describe`, `test`, `expect`).
+> * Step 3: Runs the test to confirm failure.
+> * Step 4: Implements the code.
+> * Step 5: Runs tests until green.
+> 
+> 
+
+---
+
+### How these components save you (The "Why")
+
+Here is how each generated component specifically prevents the common LLM pitfalls with Bun:
+
+#### 1. The Rules (Preventing "Node Drift")
+
+LLMs have seen billions of lines of Node.js code and only millions of Bun code. Without a **Rule**, the agent will default to what it knows best.
+
+* **The Pitfall:** The agent writes a script that requires `ts-node` to run.
+* **The Fix:** The "No Build Step" rule forces the agent to realize, *"Oh, I can just run `bun run script.ts` directly."*
+
+#### 2. The Skills (Preventing "Hallucinated Packages")
+
+Skills in Antigravity act like **Equipped Items**. When the agent needs to "Test," it doesn't guess; it picks up the `bun-test` skill.
+
+* **The Pitfall:** The agent tries to install `jest` and configure a `jest.config.js` with Babel transforms (which creates a huge mess in Bun).
+* **The Fix:** The `bun-test` skill forces it to use the built-in runner, which requires zero config.
+
+#### 3. The Workflows (Preventing "Lazy Coding")
+
+Bun is so fast that it encourages "trial and error." Workflows discipline the agent.
+
+* **The Pitfall:** Because Bun starts instantly, agents often write code, run it, see a crash, and blindly apply a fix (the "vibe coding" loop). This leads to security holes.
+* **The Fix:** The TDD Workflow forces the agent to **verify** logic with a written test case before it marks the task as done.
+
+### Next Step for You
+
+Once Antigravity generates these files, open the **Skills** panel and manually "pin" the `bun-test` skill so it is always active. This ensures that even for small "quick fix" prompts, the agent knows exactly how to verify its work.
+
+[Bun 1.0 is here](https://www.youtube.com/watch?v=BsnCpESUEqM)
+*This video from the creator of Bun is relevant as it visually demonstrates the specific API differences (like `Bun.serve` vs Node http) that your agents need to understand.*
