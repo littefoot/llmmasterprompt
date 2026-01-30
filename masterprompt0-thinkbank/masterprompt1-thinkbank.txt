@@ -66,12 +66,7 @@ Write these answers into `planning/constitution.md`. This is now the "Operating 
 
 Connect the infrastructure.
 
-1. **Infrastructure Check:**
-* Verify `.env` keys (OpenAI, Stripe, etc.).
-* Verify **n8n** connectivity (The "Pulse" of the business).
-
-
-2. **Handshake:**
+1. **Handshake:**
 * Ensure the Agent can read/write to the file system without permission errors.
 
 
