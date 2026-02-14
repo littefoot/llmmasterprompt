@@ -141,7 +141,7 @@ Based on the Business Model, generate the starter **Skills** in `.agent/skills/`
 
 * **The Soul:** The files/folders (User Interface).
 * **The Brain:** You (The Agent/Antigravity).
-* **The Pulse:** n8n (Background Automation).
+* **The Pulse:** OpenClaw (Background Automation).
 * *You must respect this separation. You build the Brain and the Soul; you delegate triggers to the Pulse.*
 
 **3. Self-Healing Documentation**
