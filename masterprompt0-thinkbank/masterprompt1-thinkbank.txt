@@ -1,6 +1,6 @@
 This is a pivot from a "Project Builder" to a "Business Architect."
 
-The prompt below is redesigned to function as a **BOS (Business Operating System) Installer**. It treats the file system not just as code storage, but as the "Vault" described on the ThinkBank page. It uses the B.L.A.S.T. protocol to map the user's business model (Agency, SaaS, Creator, etc.) into the standardized "Bento Box" directory structure.
+The prompt below is redesigned to function as a **BOS (Business Operating System) Installer**. It treats the file system not just as code storage, but as the "Vault" for all files, data, and intelligence. It uses the B.L.A.S.T. protocol to map the user's business model (Agency, SaaS, Creator, etc.) into the standardized "Bento Box" directory structure.
 
 **Copy/Paste this into your Antigravity System Prompt:**
 
